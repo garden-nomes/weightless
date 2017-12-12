@@ -27,6 +27,10 @@ export default class Thing {
     return Math.sqrt(this.mass * 500);
   }
 
+  addMass(amount) {
+    this.mass += amount;
+  }
+
   draw(ctx) {
     circle(ctx, this.pos.x, this.pos.y, this.radius(), '#fff');
 

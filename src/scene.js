@@ -38,6 +38,11 @@ export default class Scene {
     }
   }
 
+  removeChild(child) {
+    const index = this.items.indexOf(child);
+    if (index > -1) this.items.splice(index, 1);
+  }
+
   checkCollisions() {
     for (let i = 0; i < this.items.length - 1; i++) {
       for (let j = i + 1; j < this.items.length; j++) {
@@ -52,14 +57,14 @@ export default class Scene {
             a.constructor.name === 'Thing' &&
             b.constructor.name === 'Player'
           ) {
-            const index = this.items.indexOf(a);
-            this.items.splice(index, 1);
+            b.addMass(a.mass);
+            this.removeChild(a);
           } else if (
             b.constructor.name === 'Thing' &&
             a.constructor.name === 'Player'
           ) {
-            const index = this.items.indexOf(b);
-            this.items.splice(index, 1);
+            a.addMass(a.mass);
+            this.removeChild(b);
           }
         }
       }
