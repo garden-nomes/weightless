@@ -15,7 +15,7 @@ export default class Thing {
   }
 
   applyForce(force) {
-    this.forces.add(force);
+    this.forces.add(force.mult(1 / this.mass));
   }
 
   update(step) {
@@ -24,7 +24,7 @@ export default class Thing {
   }
 
   radius() {
-    return this.mass * 30;
+    return Math.sqrt(this.mass * 500);
   }
 
   draw(ctx) {
