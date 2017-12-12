@@ -10,8 +10,8 @@ export default class Scene {
   }
 
   add(item) {
-    if (item.hasOwnProperty('pos') && item.hasOwnProperty('mass'))
-      this.items.push(item);
+    item.setParent(this);
+    this.items.push(item);
   }
 
   update(step) {
@@ -47,7 +47,7 @@ export default class Scene {
         const d = Vector.sub(a.pos, b.pos).magSq();
 
         const sq = x => x * x;
-        if (d < sq(a.radius()) + sq(b.radius())) {
+        if (d < sq(a.radius() + b.radius())) {
           if (
             a.constructor.name === 'Thing' &&
             b.constructor.name === 'Player'
@@ -55,8 +55,8 @@ export default class Scene {
             const index = this.items.indexOf(a);
             this.items.splice(index, 1);
           } else if (
-            a.constructor.name === 'Thing' &&
-            b.constructor.name === 'Player'
+            b.constructor.name === 'Thing' &&
+            a.constructor.name === 'Player'
           ) {
             const index = this.items.indexOf(b);
             this.items.splice(index, 1);

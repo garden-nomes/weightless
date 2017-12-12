@@ -7,6 +7,11 @@ export default class Thing {
     this.vel = new Vector(0, 0);
     this.forces = new Vector(0, 0);
     this.mass = mass;
+    this.parent = null;
+  }
+
+  setParent(scene) {
+    this.parent = scene;
   }
 
   applyForce(force) {
