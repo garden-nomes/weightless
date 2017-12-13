@@ -1,6 +1,7 @@
 import Vector from './vector';
 import Node from './node';
 import circle from './circle';
+import getColor from './colors';
 
 const SHOW_VECTORS = false;
 
@@ -12,6 +13,7 @@ export default class Thing extends Node {
     this.vel = new Vector(0, 0);
     this.forces = new Vector(0, 0);
     this.mass = mass;
+    this.color = getColor();
   }
 
   applyForce(force) {
@@ -38,7 +40,7 @@ export default class Thing extends Node {
   }
 
   draw(ctx) {
-    circle(ctx, this.pos.x, this.pos.y, this.radius(), '#fff');
+    circle(ctx, this.pos.x, this.pos.y, this.radius(), this.color);
 
     if (SHOW_VECTORS) {
       ctx.strokeStyle = '#0f0';

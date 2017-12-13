@@ -7,6 +7,7 @@ const FORCE = 0.1;
 export default class Player extends Thing {
   constructor(x, y) {
     super(x, y, 1);
+    this.color = '#000';
   }
 
   update(step) {
@@ -20,7 +21,12 @@ export default class Player extends Thing {
 
   onCollide(other) {
     if (other.constructor.name === 'Thing') {
-      this.addMass(other.mass);
+      if (other.color === this.color) {
+        this.addMass(other.mass);
+      } else {
+        this.color = other.color;
+        this.mass = 1 + other.mass;
+      }
     }
   }
 }
