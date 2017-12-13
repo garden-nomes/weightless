@@ -37,7 +37,7 @@ export default class Thing extends Node {
   }
 
   calcRadius() {
-    return Math.sqrt(this.mass * 900 / Math.PI);
+    return Math.sqrt(this.mass * 600 / Math.PI);
   }
 
   addMass(amount) {
@@ -50,7 +50,7 @@ export default class Thing extends Node {
       start: this.radius,
       end: this.calcRadius(),
       duration: 30,
-      easing: t => easeBackOut(t, 3)
+      easing: easeBackOut.overshoot(2)
     });
   }
 

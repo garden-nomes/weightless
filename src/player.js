@@ -2,7 +2,7 @@ import Thing from './thing';
 import Vector from './vector';
 import { isKeyDown } from './key';
 
-const FORCE = 0.2;
+const FORCE = 0.15;
 const INITIAL_COLOR = '#fff';
 
 export default class Player extends Thing {
