@@ -1,17 +1,15 @@
 import Vector from './vector';
+import Node from './node';
 import circle from './circle';
 
-export default class Thing {
+export default class Thing extends Node {
   constructor(x, y, mass) {
+    super();
+
     this.pos = new Vector(x, y);
     this.vel = new Vector(0, 0);
     this.forces = new Vector(0, 0);
     this.mass = mass;
-    this.parent = null;
-  }
-
-  setParent(scene) {
-    this.parent = scene;
   }
 
   applyForce(force) {
@@ -24,7 +22,7 @@ export default class Thing {
   }
 
   radius() {
-    return Math.sqrt(this.mass * 500);
+    return Math.sqrt(this.mass * 300 / Math.PI);
   }
 
   addMass(amount) {

@@ -1,6 +1,6 @@
 import Player from './player';
 import Thing from './thing';
-import Scene from './Scene';
+import PhysicsScene from './physics-scene';
 
 export default class Game {
   constructor(canvas) {
@@ -9,10 +9,10 @@ export default class Game {
     this.height = canvas.height;
     this.update = this.update.bind(this);
 
-    this.scene = new Scene(this.width, this.height);
+    this.scene = new PhysicsScene(this.width, this.height);
 
     this.player = new Player(this.width / 2, this.height / 2);
-    this.scene.add(this.player);
+    this.scene.addChild(this.player);
 
     this.prevTimestamp = null;
 
@@ -22,7 +22,7 @@ export default class Game {
         Math.random() * this.height,
         0.5
       );
-      this.scene.add(thing);
+      this.scene.addChild(thing);
     }
   }
 
