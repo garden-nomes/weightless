@@ -4,6 +4,7 @@
   "main": "index.js",
   "author": "Noah Weiner <noahbweiner@gmail.com>",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "start": "webpack-dev-server --open --watch --colors --config ./webpack/dev.config.js",
     "build": "webpack --config webpack/prod.config.js --colors"
