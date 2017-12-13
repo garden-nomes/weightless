@@ -2,10 +2,7 @@ import Vector from './vector';
 import Node from './node';
 import Transition from './transition';
 import { easeBackOut, easeCubicOut } from 'd3-ease';
-import circle from './circle';
 import getColor from './colors';
-
-const SHOW_VECTORS = false;
 
 export default class Thing extends Node {
   constructor(x, y, mass) {
@@ -63,25 +60,10 @@ export default class Thing extends Node {
     }
   }
 
-  draw(ctx) {
-    circle(ctx, this.pos.x, this.pos.y, this.radius, this.color);
-
-    if (SHOW_VECTORS) {
-      ctx.strokeStyle = '#0f0';
-      ctx.beginPath();
-      ctx.moveTo(this.pos.x, this.pos.y);
-      ctx.lineTo(this.pos.x + this.vel.x * 10, this.pos.y + this.vel.y * 10);
-      ctx.stroke();
-
-      ctx.strokeStyle = '#f00';
-      ctx.beginPath();
-      ctx.moveTo(this.pos.x, this.pos.y);
-      ctx.lineTo(
-        this.pos.x + this.forces.x * 100,
-        this.pos.y + this.forces.y * 100
-      );
-      ctx.stroke();
-    }
+  draw(renderer) {
+    renderer.drawCircle(this.pos.x, this.pos.y, this.radius, {
+      color: this.color
+    });
 
     this.forces.x = 0;
     this.forces.y = 0;

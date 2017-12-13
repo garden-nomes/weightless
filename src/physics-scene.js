@@ -9,7 +9,7 @@ export default class PhysicsScene extends Scene {
 
     super.update(step);
 
-    this.wrapItems();
+    // this.wrapItems();
     this.checkCollisions();
   }
 

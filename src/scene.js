@@ -1,8 +1,7 @@
 export default class Scene {
-  constructor(width, height) {
+  constructor(camera) {
     this.items = [];
-    this.width = width;
-    this.height = height;
+    this.camera = camera;
   }
 
   addChild(item) {
@@ -19,7 +18,7 @@ export default class Scene {
     this.items.forEach(i => i.update(step));
   }
 
-  draw(ctx) {
-    this.items.forEach(i => i.draw(ctx));
+  draw(renderer) {
+    this.items.forEach(i => i.draw(renderer));
   }
 }

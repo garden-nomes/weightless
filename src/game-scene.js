@@ -3,19 +3,14 @@ import Player from './player';
 import Thing from './thing';
 
 export default class GameScene extends PhysicsScene {
-  constructor(width, height) {
-    super(width, height);
+  constructor(camera) {
+    super(camera);
 
-    this.player = new Player(this.width / 2, this.height / 2);
+    this.player = new Player(0, 0);
     this.addChild(this.player);
 
     for (let i = 0; i < 10; i++) {
-      const thing = new Thing(
-        Math.random() * this.width,
-        Math.random() * this.height,
-        0.5
-      );
-      this.addChild(thing);
+      this.spawnThing();
     }
 
     this.itemCount = this.items.length;
@@ -29,14 +24,14 @@ export default class GameScene extends PhysicsScene {
 
   ensureItemCount() {
     if (this.items.length < this.itemCount) {
-      const thing = new Thing(
-        Math.random() * this.width,
-        Math.random() * this.height,
-        0.5
-      );
-
-      this.addChild(thing);
+      this.spawnThing();
     }
+  }
+
+  spawnThing() {
+    const coords = this.camera.getRandomInBounds();
+    const thing = new Thing(coords.x, coords.y, 0.5);
+    this.addChild(thing);
   }
 
   renderLevel() {

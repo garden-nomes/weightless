@@ -1,6 +1,5 @@
 import Thing from './thing';
 import Vector from './vector';
-import circle from './circle';
 import { isKeyDown } from './key';
 
 const FORCE = 0.2;
@@ -53,26 +52,22 @@ export default class Player extends Thing {
     }
   }
 
-  draw(ctx) {
-    super.draw(ctx);
-    this.renderScore(ctx);
+  draw(renderer) {
+    super.draw(renderer);
+    this.renderScore(renderer);
   }
 
-  renderScore(ctx) {
+  renderScore(renderer) {
     for (let i = 0; i < this.target; i++) {
       const theta = Math.PI * 2 / this.target * i + this.scoreAngle;
       const offset = this.radius + 20;
       const pos = Vector.add(this.pos, Vector.fromAngle(theta, offset));
 
-      circle(
-        ctx,
-        pos.x,
-        pos.y,
-        5,
-        this.color,
-        i >= this.items ? 0.3 : 1,
-        i >= this.items
-      );
+      renderer.drawCircle(pos.x, pos.y, 5, {
+        color: this.color,
+        stroke: i >= this.items,
+        opacity: i >= this.items ? 0.3 : 1
+      });
     }
   }
 }

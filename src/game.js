@@ -1,14 +1,20 @@
 import GameScene from './game-scene';
+import Renderer from './renderer';
+import Camera from './camera';
 
 export default class Game {
   constructor(canvas) {
-    this.context = canvas.getContext('2d');
-    this.width = canvas.width;
-    this.height = canvas.height;
+    // set up camera
+    this.camera = new Camera(canvas.width, canvas.height);
+
+    // set up renderer
+    this.renderer = new Renderer(canvas.getContext('2d'), this.camera);
+
+    // set up root scene
+    this.scene = new GameScene(this.camera);
+
     this.update = this.update.bind(this);
     this.prevTimestamp = null;
-
-    this.scene = new GameScene(this.width, this.height);
   }
 
   start() {
@@ -16,14 +22,13 @@ export default class Game {
   }
 
   update(timestamp) {
-    const ctx = this.context;
-    ctx.clearRect(0, 0, this.width, this.height);
+    this.renderer.clear();
 
     if (this.prevTimestamp !== null) {
       const step = timestamp - this.prevTimestamp;
 
       this.scene.update(step * 60 / 1000);
-      this.scene.draw(ctx);
+      this.scene.draw(this.renderer);
     }
 
     this.prevTimestamp = timestamp;
