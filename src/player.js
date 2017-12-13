@@ -17,4 +17,10 @@ export default class Player extends Thing {
 
     super.update(step);
   }
+
+  onCollide(other) {
+    if (other.constructor.name === 'Thing') {
+      this.addMass(other.mass);
+    }
+  }
 }

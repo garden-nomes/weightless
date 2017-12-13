@@ -24,11 +24,17 @@ export default class Thing extends Node {
   }
 
   radius() {
-    return Math.sqrt(this.mass * 300 / Math.PI);
+    return Math.sqrt(this.mass * 900 / Math.PI);
   }
 
   addMass(amount) {
     this.mass += amount;
+  }
+
+  onCollide(other) {
+    if (other.constructor.name === 'Player') {
+      this.remove();
+    }
   }
 
   draw(ctx) {

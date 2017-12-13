@@ -35,24 +35,11 @@ export default class PhysicsScene extends Scene {
       for (let j = i + 1; j < this.items.length; j++) {
         const a = this.items[i];
         const b = this.items[j];
-
         const d = Vector.sub(a.pos, b.pos).magSq();
-
         const sq = x => x * x;
         if (d < sq(a.radius() + b.radius())) {
-          if (
-            a.constructor.name === 'Thing' &&
-            b.constructor.name === 'Player'
-          ) {
-            b.addMass(a.mass);
-            this.removeChild(a);
-          } else if (
-            b.constructor.name === 'Thing' &&
-            a.constructor.name === 'Player'
-          ) {
-            a.addMass(a.mass);
-            this.removeChild(b);
-          }
+          a.onCollide(b);
+          b.onCollide(a);
         }
       }
     }
