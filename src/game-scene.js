@@ -24,6 +24,7 @@ export default class GameScene extends PhysicsScene {
   update(step) {
     super.update(step);
     this.ensureItemCount();
+    this.renderLevel();
   }
 
   ensureItemCount() {
@@ -36,5 +37,9 @@ export default class GameScene extends PhysicsScene {
 
       this.addChild(thing);
     }
+  }
+
+  renderLevel() {
+    document.title = `lvl ${this.player.target - 2}`;
   }
 }

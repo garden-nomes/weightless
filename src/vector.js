@@ -50,6 +50,10 @@ export default class Vector {
     return sq(this.x) + sq(this.y);
   }
 
+  mag() {
+    return Math.sqrt(this.magSq());
+  }
+
   heading() {
     return Math.atan2(this.y, this.x);
   }
