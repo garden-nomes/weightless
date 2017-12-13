@@ -37,7 +37,7 @@ export default class PhysicsScene extends Scene {
         const b = this.items[j];
         const d = Vector.sub(a.pos, b.pos).magSq();
         const sq = x => x * x;
-        if (d < sq(a.radius() + b.radius())) {
+        if (d < sq(a.radius + b.radius)) {
           a.onCollide(b);
           b.onCollide(a);
         }

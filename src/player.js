@@ -3,7 +3,7 @@ import Vector from './vector';
 import circle from './circle';
 import { isKeyDown } from './key';
 
-const FORCE = 0.1;
+const FORCE = 0.2;
 const INITIAL_COLOR = '#fff';
 
 export default class Player extends Thing {
@@ -37,21 +37,19 @@ export default class Player extends Thing {
 
   reset() {
     this.items = 0;
-    this.mass = 1;
+    this.setMass(1);
     this.color = INITIAL_COLOR;
   }
 
   onCollide(other) {
     if (other.constructor.name === 'Thing') {
-      if (other.color === this.color) {
-        this.addMass(other.mass);
-        this.score();
-      } else {
+      if (other.color !== this.color) {
         this.reset();
         this.color = other.color;
-        this.mass = 1 + other.mass;
-        this.score();
       }
+
+      this.addMass(other.mass);
+      this.score();
     }
   }
 
@@ -63,7 +61,7 @@ export default class Player extends Thing {
   renderScore(ctx) {
     for (let i = 0; i < this.target; i++) {
       const theta = Math.PI * 2 / this.target * i + this.scoreAngle;
-      const offset = this.radius() + 20;
+      const offset = this.radius + 20;
       const pos = Vector.add(this.pos, Vector.fromAngle(theta, offset));
 
       circle(

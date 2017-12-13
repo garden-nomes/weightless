@@ -1,5 +1,7 @@
 import Vector from './vector';
 import Node from './node';
+import Transition from './transition';
+import { easeBackOut, easeCubicOut } from 'd3-ease';
 import circle from './circle';
 import getColor from './colors';
 
@@ -14,6 +16,14 @@ export default class Thing extends Node {
     this.forces = new Vector(0, 0);
     this.mass = mass;
     this.color = getColor();
+
+    this.radius = 0;
+    this.radiusTransition = new Transition({
+      start: 0,
+      end: this.calcRadius(),
+      duration: 30,
+      easing: easeCubicOut
+    });
   }
 
   applyForce(force) {
@@ -23,14 +33,28 @@ export default class Thing extends Node {
   update(step) {
     this.vel.add(Vector.mult(this.forces, step));
     this.pos.add(Vector.mult(this.vel, step));
+
+    if (this.radiusTransition !== null) {
+      this.radius = this.radiusTransition.step(step);
+    }
   }
 
-  radius() {
+  calcRadius() {
     return Math.sqrt(this.mass * 900 / Math.PI);
   }
 
   addMass(amount) {
-    this.mass += amount;
+    this.setMass(this.mass + amount);
+  }
+
+  setMass(mass) {
+    this.mass = mass;
+    this.radiusTransition = new Transition({
+      start: this.radius,
+      end: this.calcRadius(),
+      duration: 30,
+      easing: t => easeBackOut(t, 3)
+    });
   }
 
   onCollide(other) {
@@ -40,7 +64,7 @@ export default class Thing extends Node {
   }
 
   draw(ctx) {
-    circle(ctx, this.pos.x, this.pos.y, this.radius(), this.color);
+    circle(ctx, this.pos.x, this.pos.y, this.radius, this.color);
 
     if (SHOW_VECTORS) {
       ctx.strokeStyle = '#0f0';
