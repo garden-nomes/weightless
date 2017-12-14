@@ -4,9 +4,13 @@ export default class Scene {
     this.camera = camera;
   }
 
-  addChild(item) {
+  addChild(item, front = false) {
     item.setParent(this);
-    this.items.push(item);
+    if (front) {
+      this.items.splice(0, 0, item);
+    } else {
+      this.items.push(item);
+    }
   }
 
   removeChild(child) {

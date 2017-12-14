@@ -23,7 +23,7 @@ export default class Player extends Thing {
     if (isKeyDown('ArrowUp')) this.applyForce(new Vector(0, -FORCE));
 
     super.update(step);
-    this.scoreAngle += step * this.vel.x / 100;
+    this.scoreAngle += step / 100; // * this.vel.mag() / 100;
   }
 
   score() {

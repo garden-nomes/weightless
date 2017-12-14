@@ -1,4 +1,4 @@
-const GRAVITATIONAL_CONSTANT = 100;
+const GRAVITATIONAL_CONSTANT = 150;
 import Vector from './vector';
 import Scene from './scene';
 import { isKeyDown } from './key';
@@ -9,7 +9,6 @@ export default class PhysicsScene extends Scene {
 
     super.update(step);
 
-    // this.wrapItems();
     this.checkCollisions();
   }
 
@@ -43,15 +42,5 @@ export default class PhysicsScene extends Scene {
         }
       }
     }
-  }
-
-  wrapItems() {
-    this.items.forEach(item => {
-      const { x, y } = item.pos;
-      if (x < 0) item.pos.x += this.width;
-      if (y < 0) item.pos.y += this.height;
-      if (x > this.width) item.pos.x -= this.width;
-      if (y > this.height) item.pos.y -= this.height;
-    });
   }
 }
