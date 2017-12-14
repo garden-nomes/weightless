@@ -21,6 +21,8 @@ export default class Thing extends Node {
       duration: 30,
       easing: easeCubicOut
     });
+
+    this.__hasGravity = true;
   }
 
   applyForce(force) {

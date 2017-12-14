@@ -18,13 +18,15 @@ export default class PhysicsScene extends Scene {
         const a = this.items[i];
         const b = this.items[j];
 
-        const d = Vector.sub(a.pos, b.pos);
-        let f =
-          GRAVITATIONAL_CONSTANT * a.mass * b.mass / Math.max(d.magSq(), 100);
+        if (a.__hasGravity && b.__hasGravity) {
+          const d = Vector.sub(a.pos, b.pos);
+          let f =
+            GRAVITATIONAL_CONSTANT * a.mass * b.mass / Math.max(d.magSq(), 225);
 
-        if (isKeyDown('Space')) f *= -1;
-        a.applyForce(Vector.fromAngle(d.heading(), -f));
-        b.applyForce(Vector.fromAngle(d.heading(), f));
+          if (isKeyDown('Space')) f *= -1;
+          a.applyForce(Vector.fromAngle(d.heading(), -f));
+          b.applyForce(Vector.fromAngle(d.heading(), f));
+        }
       }
     }
   }
@@ -34,11 +36,14 @@ export default class PhysicsScene extends Scene {
       for (let j = i + 1; j < this.items.length; j++) {
         const a = this.items[i];
         const b = this.items[j];
-        const d = Vector.sub(a.pos, b.pos).magSq();
-        const sq = x => x * x;
-        if (d < sq(a.radius + b.radius)) {
-          a.onCollide(b);
-          b.onCollide(a);
+
+        if (a.onCollide && b.onCollide) {
+          const d = Vector.sub(a.pos, b.pos).magSq();
+          const sq = x => x * x;
+          if (d < sq(a.radius + b.radius)) {
+            a.onCollide(b);
+            b.onCollide(a);
+          }
         }
       }
     }
