@@ -245,11 +245,13 @@ class Pad {
   }
 
   setAlternate(alt) {
-    const freq = this.scale.stepToFrequency(this.scale.steps[alt ? 3 : 5]) / 2;
+    const freq0 = this.scale.stepToFrequency(this.scale.steps[alt ? 0 : 2]) / 2;
+    if (this.vcos[0].osc.frequency.value !== freq0)
+      this.vcos[0].setFrequency(freq0);
 
-    if (this.vcos[1].osc.frequency.value !== freq) {
-      this.vcos[1].setFrequency(freq);
-    }
+    const freq1 = this.scale.stepToFrequency(this.scale.steps[alt ? 4 : 5]) / 2;
+    if (this.vcos[1].osc.frequency.value !== freq1)
+      this.vcos[1].setFrequency(freq1);
   }
 
   setFrequencies() {
