@@ -13,6 +13,7 @@ export default class PhysicsScene extends Scene {
   }
 
   applyGravity() {
+    this.sound.alternatePad(isKeyDown('Space'));
     for (let i = 0; i < this.items.length - 1; i++) {
       for (let j = i + 1; j < this.items.length; j++) {
         const a = this.items[i];

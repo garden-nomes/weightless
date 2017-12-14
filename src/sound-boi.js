@@ -147,6 +147,14 @@ class Scale {
     this.base = this.stepToFrequency(5);
     if (this.base > 440) this.base /= 2;
   }
+
+  setMajor(isMajor) {
+    if (isMajor) {
+      this.steps = [0, 2, 4, 5, 7, 9, 11];
+    } else {
+      this.steps = [0, 2, 3, 5, 7, 8, 10];
+    }
+  }
 }
 
 class ProceduralMelody {
@@ -208,7 +216,7 @@ class Pad {
     this.vca = new VCA(context);
     this.vca.connect(this.gain);
 
-    this.envelope = new Envelope(context, 0.2, 30);
+    this.envelope = new Envelope(context, 4, 60);
     this.envelope.connect(this.vca.amplitude);
 
     for (let i = 0; i < 2; i++) {
@@ -234,6 +242,19 @@ class Pad {
     } else {
       this.output.connect(node);
     }
+  }
+
+  setAlternate(alt) {
+    const freq = this.scale.stepToFrequency(this.scale.steps[alt ? 3 : 5]) / 2;
+
+    if (this.vcos[1].osc.frequency.value !== freq) {
+      this.vcos[1].setFrequency(freq);
+    }
+  }
+
+  setFrequencies() {
+    this.vcos[0].setFrequency(this.scale.stepToFrequency(this.scale.steps[0]));
+    this.vcos[1].setFrequency(this.scale.stepToFrequency(this.scale.steps[2]));
   }
 }
 
@@ -296,5 +317,11 @@ export default class SoundBoi {
   shift() {
     this.scale.shift();
     this.pad.setScale(this.scale);
+  }
+
+  alternatePad(value) {
+    this.pad.setAlternate(!value);
+    // this.scale.setMajor(!value);
+    // this.pad.setFrequencies();
   }
 }
