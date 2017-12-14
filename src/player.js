@@ -45,7 +45,6 @@ export default class Player extends Thing {
     this.items = 0;
     this.setMass(1);
     this.color = INITIAL_COLOR;
-    this.sound.reset();
   }
 
   onCollide(other) {

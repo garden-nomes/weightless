@@ -1,14 +1,19 @@
 class VCO {
-  constructor(context, type = 'sine') {
+  constructor(context, type = 'sine', gain = 1, detune = 0) {
     this.context = context;
 
     this.osc = context.createOscillator();
     this.osc.type = type;
+    this.osc.detune.value = detune;
     this.setFrequency(440);
     this.osc.start(0);
 
+    this.gain = context.createGain();
+    this.gain.gain.value = gain;
+    this.osc.connect(this.gain);
+
     this.input = this.osc;
-    this.output = this.osc;
+    this.output = this.gain;
   }
 
   setType(type) {
@@ -73,8 +78,11 @@ class VCA {
 
 class Tone {
   constructor(context) {
-    this.vco = new VCO(context, 'sine');
-    this.envelope = new Envelope(context, 0.05, 3);
+    this.osc1 = new VCO(context, 'sine', 0.5);
+    this.osc2 = new VCO(context, 'triangle', 0.2, 4);
+    this.osc3 = new VCO(context, 'square', 0.5, -2);
+
+    this.envelope = new Envelope(context, 0.1, 2.5);
     this.vca = new VCA(context);
     this.filter = context.createBiquadFilter();
 
@@ -84,13 +92,17 @@ class Tone {
     this.input = this.vco;
     this.output = this.filter;
 
-    this.vco.connect(this.vca);
+    this.osc1.connect(this.vca);
+    this.osc2.connect(this.vca);
+    this.osc3.connect(this.vca);
     this.envelope.connect(this.vca.amplitude);
     this.vca.connect(this.filter);
   }
 
   play(frequency) {
-    this.vco.setFrequency(frequency);
+    this.osc1.setFrequency(frequency);
+    this.osc2.setFrequency(frequency);
+    this.osc3.setFrequency(frequency);
     this.envelope.trigger();
   }
 
@@ -137,10 +149,36 @@ class Scale {
   }
 }
 
+class ProceduralMelody {
+  constructor(scale) {
+    this.scale = scale;
+    this.scaleIndex = 0;
+    this.record = [];
+  }
+
+  getNote() {
+    const note = this.scale.stepToFrequency(this.scale.steps[this.scaleIndex]);
+    this.scaleIndex += ~~(Math.random() * 7 - 3);
+
+    if (this.scaleIndex < 0) this.scaleIndex += this.scale.steps.length;
+    if (this.scaleIndex >= this.scale.steps.length)
+      this.scaleIndex -= this.scale.steps.length;
+
+    this.record.push(note);
+    return note;
+  }
+
+  getRecord() {
+    const r = this.record;
+    this.record = [];
+    return r;
+  }
+}
+
 class Boop {
   constructor(context, scale) {
-    this.scale = scale;
-    this.step = 0;
+    this.melody = new ProceduralMelody(scale);
+    console.log(this.melody);
     this.tone = new Tone(context);
 
     this.input = this.tone;
@@ -148,11 +186,7 @@ class Boop {
   }
 
   trigger() {
-    this.tone.play(this.scale.getRandomFrequency());
-  }
-
-  reset() {
-    this.step = 0;
+    this.tone.play(this.melody.getNote());
   }
 
   connect(node) {
@@ -190,7 +224,7 @@ class Pad {
   setScale(scale) {
     this.scale = scale;
     this.vcos[0].setFrequency(scale.stepToFrequency(scale.steps[0]));
-    this.vcos[1].setFrequency(scale.stepToFrequency(scale.steps[4]));
+    this.vcos[1].setFrequency(scale.stepToFrequency(scale.steps[2]));
     this.envelope.trigger();
   }
 
@@ -262,9 +296,5 @@ export default class SoundBoi {
   shift() {
     this.scale.shift();
     this.pad.setScale(this.scale);
-  }
-
-  reset() {
-    this.boop.reset();
   }
 }
