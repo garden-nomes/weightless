@@ -74,7 +74,7 @@ class VCA {
 class Tone {
   constructor(context) {
     this.vco = new VCO(context, 'sine');
-    this.envelope = new Envelope(context, 0.1, 0.5);
+    this.envelope = new Envelope(context, 0.05, 3);
     this.vca = new VCA(context);
     this.filter = context.createBiquadFilter();
 
@@ -164,6 +164,45 @@ class Boop {
   }
 }
 
+class Pad {
+  constructor(context, scale) {
+    this.vcos = [];
+
+    this.gain = context.createGain();
+    this.gain.gain.value = 0.2;
+
+    this.vca = new VCA(context);
+    this.vca.connect(this.gain);
+
+    this.envelope = new Envelope(context, 0.2, 30);
+    this.envelope.connect(this.vca.amplitude);
+
+    for (let i = 0; i < 2; i++) {
+      const vco = new VCO(context, 'sine');
+      vco.connect(this.vca);
+      this.vcos.push(vco);
+    }
+
+    this.output = this.gain;
+    this.setScale(scale);
+  }
+
+  setScale(scale) {
+    this.scale = scale;
+    this.vcos[0].setFrequency(scale.stepToFrequency(scale.steps[0]));
+    this.vcos[1].setFrequency(scale.stepToFrequency(scale.steps[4]));
+    this.envelope.trigger();
+  }
+
+  connect(node) {
+    if (node.input) {
+      this.output.connect(node.input);
+    } else {
+      this.output.connect(node);
+    }
+  }
+}
+
 class Ding {
   constructor(context, scale) {
     this.scale = scale;
@@ -207,6 +246,9 @@ export default class SoundBoi {
 
     this.ding = new Ding(this.context, this.scale);
     this.ding.connect(this.context.destination);
+
+    this.pad = new Pad(this.context, this.scale);
+    this.pad.connect(this.context.destination);
   }
 
   boopMe() {
@@ -219,6 +261,7 @@ export default class SoundBoi {
 
   shift() {
     this.scale.shift();
+    this.pad.setScale(this.scale);
   }
 
   reset() {
