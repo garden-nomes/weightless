@@ -1,7 +1,8 @@
 export default class Scene {
-  constructor(camera) {
+  constructor(camera, sound) {
     this.items = [];
     this.camera = camera;
+    this.sound = sound;
   }
 
   addChild(item, front = false) {

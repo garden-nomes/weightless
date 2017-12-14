@@ -1,10 +1,13 @@
 import GameScene from './game-scene';
 import Renderer from './renderer';
 import Camera from './camera';
+import SoundBoi from './sound-boi';
 
 export default class Game {
   constructor(canvas) {
     this.canvas = canvas;
+
+    this.sound = new SoundBoi();
 
     // set up camera
     this.camera = new Camera(canvas.width, canvas.height);
@@ -13,7 +16,7 @@ export default class Game {
     this.renderer = new Renderer(canvas.getContext('2d'), this.camera);
 
     // set up root scene
-    this.scene = new GameScene(this.camera);
+    this.scene = new GameScene(this.camera, this.sound);
 
     this.update = this.update.bind(this);
     this.resize = this.resize.bind(this);
