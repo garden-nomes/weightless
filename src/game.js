@@ -4,6 +4,8 @@ import Camera from './camera';
 
 export default class Game {
   constructor(canvas) {
+    this.canvas = canvas;
+
     // set up camera
     this.camera = new Camera(canvas.width, canvas.height);
 
@@ -14,11 +16,14 @@ export default class Game {
     this.scene = new GameScene(this.camera);
 
     this.update = this.update.bind(this);
+    this.resize = this.resize.bind(this);
+
     this.prevTimestamp = null;
   }
 
   start() {
     window.requestAnimationFrame(this.update);
+    window.addEventListener('resize', this.resize);
   }
 
   update(timestamp) {
@@ -33,5 +38,12 @@ export default class Game {
 
     this.prevTimestamp = timestamp;
     window.requestAnimationFrame(this.update);
+  }
+
+  resize(event) {
+    this.canvas.setAttribute('width', window.innerWidth);
+    this.canvas.setAttribute('height', window.innerHeight);
+    this.camera.width = this.canvas.width;
+    this.camera.height = this.canvas.height;
   }
 }
