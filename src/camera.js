@@ -6,17 +6,27 @@ export default class Camera {
     this.center = new Vector(0, 0);
     this.width = width;
     this.height = height;
+    this.zoom = 1;
   }
 
   getScreenCoordinates(x, y) {
     return new Vector(x, y)
       .sub(this.center)
+      .mult(this.zoom)
       .add(new Vector(this.width / 2, this.height / 2));
   }
 
   getBounds() {
-    const tl = new Vector(-this.width / 2, -this.height / 2).add(this.center);
-    return new Rect(tl.x, tl.y, tl.x + this.width, tl.y + this.height);
+    const tl = new Vector(-this.width / 2, -this.height / 2)
+      .mult(1 / this.zoom)
+      .add(this.center);
+
+    return new Rect(
+      tl.x,
+      tl.y,
+      tl.x + this.width / this.zoom,
+      tl.y + this.height / this.zoom
+    );
   }
 
   getRandomInBounds() {
@@ -30,6 +40,14 @@ export default class Camera {
 
   setCenter(x, y) {
     this.center = new Vector(x, y);
+  }
+
+  getZoom() {
+    return this.zoom;
+  }
+
+  setZoom(zoom) {
+    this.zoom = zoom;
   }
 
   isInBounds(x, y, margin = 0) {

@@ -126,5 +126,9 @@ export default class GameScene extends PhysicsScene {
   moveCamera() {
     this.camera.center.x = this.player.pos.x;
     this.camera.center.y = this.player.pos.y;
+    this.camera.zoom = Math.min(
+      Math.max(0.5, 1.1 - this.player.vel.mag() / 50),
+      0.85
+    );
   }
 }

@@ -33,7 +33,13 @@ export default class Renderer {
 
       this.withStyle(style, () => {
         this.ctx.beginPath();
-        this.ctx.arc(coords.x, coords.y, radius, 0, 2 * Math.PI);
+        this.ctx.arc(
+          coords.x,
+          coords.y,
+          radius * this.camera.getZoom(),
+          0,
+          2 * Math.PI
+        );
 
         if (style.stroke) {
           this.ctx.stroke();
