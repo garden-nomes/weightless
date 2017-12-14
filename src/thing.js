@@ -52,7 +52,7 @@ export default class Thing extends Node {
       start: this.radius,
       end: this.calcRadius(),
       duration: 30,
-      easing: easeBackOut.overshoot(2)
+      easing: easeBackOut.overshoot(3)
     });
   }
 

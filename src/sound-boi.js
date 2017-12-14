@@ -74,14 +74,19 @@ class VCA {
 class Tone {
   constructor(context) {
     this.vco = new VCO(context, 'sine');
-    this.envelope = new Envelope(context, 0.05, 0.3);
+    this.envelope = new Envelope(context, 0.1, 0.5);
     this.vca = new VCA(context);
+    this.filter = context.createBiquadFilter();
+
+    this.filter.type = 'lowpass';
+    this.filter.frequency.value = 440;
 
     this.input = this.vco;
-    this.output = this.vca;
+    this.output = this.filter;
 
     this.vco.connect(this.vca);
     this.envelope.connect(this.vca.amplitude);
+    this.vca.connect(this.filter);
   }
 
   play(frequency) {
@@ -102,6 +107,10 @@ class Scale {
   constructor(base, steps) {
     this.base = base;
     this.steps = steps;
+  }
+
+  getStep(step) {
+    return this.stepToFrequency(this.steps[step]);
   }
 
   stepToFrequency(step) {
@@ -131,6 +140,7 @@ class Scale {
 class Boop {
   constructor(context, scale) {
     this.scale = scale;
+    this.step = 0;
     this.tone = new Tone(context);
 
     this.input = this.tone;
@@ -139,6 +149,10 @@ class Boop {
 
   trigger() {
     this.tone.play(this.scale.getRandomFrequency());
+  }
+
+  reset() {
+    this.step = 0;
   }
 
   connect(node) {
@@ -205,5 +219,9 @@ export default class SoundBoi {
 
   shift() {
     this.scale.shift();
+  }
+
+  reset() {
+    this.boop.reset();
   }
 }
