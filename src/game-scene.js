@@ -35,6 +35,11 @@ export default class GameScene extends PhysicsScene {
     this.moveCamera();
   }
 
+  draw(renderer) {
+    renderer.drawTilingBackground();
+    super.draw(renderer);
+  }
+
   ensureThingCount() {
     // count items on screen
     let thingCount = 0;

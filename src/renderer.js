@@ -49,4 +49,42 @@ export default class Renderer {
       });
     }
   }
+
+  drawTilingBackground() {
+    const bounds = this.camera.getBounds();
+
+    this.withStyle(
+      {
+        stroke: true,
+        strokeWidth: 2,
+        color: '#373737'
+      },
+      () => {
+        const radius = 200;
+
+        const xOffset = this.camera.center.x % radius;
+        const yOffset = this.camera.center.y % radius;
+
+        let xStart = bounds.x1 - radius - xOffset;
+        let yStart = bounds.y1 - radius - yOffset;
+
+        this.ctx.beginPath();
+        for (let x = xStart; x < bounds.x2 + radius; x += radius * 1) {
+          for (let y = yStart; y < bounds.y2 + radius; y += radius * 1) {
+            const coords = this.camera.getScreenCoordinates(x, y);
+            this.ctx.moveTo(coords.x + radius * this.camera.zoom - 1, coords.y);
+
+            this.ctx.arc(
+              coords.x,
+              coords.y,
+              radius * this.camera.zoom - 1,
+              0,
+              2 * Math.PI
+            );
+          }
+        }
+        this.ctx.stroke();
+      }
+    );
+  }
 }
