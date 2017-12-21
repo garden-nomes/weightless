@@ -60,10 +60,10 @@ export default class Renderer {
         color: '#373737'
       },
       () => {
-        const radius = 200;
+        const radius = 300;
 
-        const xOffset = this.camera.center.x % radius;
-        const yOffset = this.camera.center.y % radius;
+        const xOffset = this.camera.center.x % (radius * this.camera.zoom);
+        const yOffset = this.camera.center.y % (radius * this.camera.zoom);
 
         let xStart = bounds.x1 - radius - xOffset;
         let yStart = bounds.y1 - radius - yOffset;

@@ -26,4 +26,8 @@ export default class Scene {
   draw(renderer) {
     this.items.forEach(i => i.draw(renderer));
   }
+
+  getItemsByType(type) {
+    return this.items.filter(i => i.constructor.name === type);
+  }
 }

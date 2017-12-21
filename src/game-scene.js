@@ -3,40 +3,49 @@ import Vector from './vector';
 import Player from './player';
 import Thing from './thing';
 import Particle from './particle';
+import SpawnController from './spawn-controller';
 
 const MIN_THINGS_ON_SCREEN = 10;
 const MAX_THINGS = 15;
-const MIN_PARTICLES_ON_SCREEN = 5;
-const MAX_PARTICLES = 10;
+const MIN_PARTICLES_ON_SCREEN = 10;
+const MAX_PARTICLES = 15;
 
 export default class GameScene extends PhysicsScene {
   constructor(camera, composer) {
     super(camera, composer);
 
-    for (let i = 0; i < 10; i++) {
-      this.spawnParticle();
-    }
-
-    this.player = new Player(0, 0, sound);
+    this.player = new Player(0, 0, composer);
     this.addChild(this.player);
 
-    for (let i = 0; i < 10; i++) {
-      this.spawnThing();
-    }
+    this.thingController = new SpawnController({
+      spawn: (x, y) => this.addChild(new Thing(x, y, 0.5)),
+      remove: thing => this.removeChild(thing),
+      safeDistance: 200
+    });
+
+    this.particleController = new SpawnController({
+      spawn: (x, y) => this.addChild(new Particle(x, y), true),
+      remove: particle => this.removeChild(particle)
+    });
 
     this.itemCount = this.items.length;
   }
 
   update(step) {
     super.update(step);
-    this.ensureThingCount();
-    this.ensureParticleCount();
+
+    this.thingController.check(this.getItemsByType('Thing'), this.player.pos);
+    this.particleController.check(
+      this.getItemsByType('Particle'),
+      this.player.pos
+    );
+
     this.renderLevel();
     this.moveCamera();
   }
 
   draw(renderer) {
-    renderer.drawTilingBackground();
+    // renderer.drawTilingBackground();
     super.draw(renderer);
   }
 
