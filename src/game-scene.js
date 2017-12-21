@@ -10,8 +10,8 @@ const MIN_PARTICLES_ON_SCREEN = 5;
 const MAX_PARTICLES = 10;
 
 export default class GameScene extends PhysicsScene {
-  constructor(camera, sound) {
-    super(camera, sound);
+  constructor(camera, composer) {
+    super(camera, composer);
 
     for (let i = 0; i < 10; i++) {
       this.spawnParticle();

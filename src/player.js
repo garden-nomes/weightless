@@ -6,8 +6,8 @@ const FORCE = 0.15;
 const INITIAL_COLOR = '#fff';
 
 export default class Player extends Thing {
-  constructor(x, y, sound) {
-    super(x, y, 1);
+  constructor(x, y, composer) {
+    super(x, y, 0.5);
     this.color = INITIAL_COLOR;
 
     this.target = 3;
@@ -15,7 +15,7 @@ export default class Player extends Thing {
 
     this.scoreAngle = 0;
 
-    this.sound = sound;
+    this.composer = composer;
   }
 
   update(step) {
@@ -34,10 +34,10 @@ export default class Player extends Thing {
     if (this.items >= this.target) {
       this.target++;
       this.reset();
-      this.sound.dingMe();
-      this.sound.shift();
+      this.composer.dingMe();
+      this.composer.shift();
     } else {
-      this.sound.boopMe();
+      this.composer.boopMe();
     }
   }
 
