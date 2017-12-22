@@ -12,24 +12,50 @@ export default class Pad {
     this.vca = new VCA(context);
     this.vca.connect(this.gain);
 
-    this.envelope = new Envelope(context, 4, 60);
+    this.envelope = new Envelope(context, 3, 60);
     this.envelope.connect(this.vca.amplitude);
 
-    for (let i = 0; i < 3; i++) {
-      const vco = new VCO(context, 'sine');
+    this.output = this.gain;
+
+    this.isMajor = true;
+    this.setScale(scale);
+    const chord = this.getChord();
+
+    for (let i = 0; i < chord.length; i++) {
+      const vco = new VCO(context, 'sine', i > 0 ? 0.2 : 1);
       vco.connect(this.vca);
+      vco.setFrequency(chord[i]);
       this.vcos.push(vco);
     }
 
-    this.output = this.gain;
-    this.setScale(scale);
+    this.envelope.trigger();
   }
 
   setScale(scale) {
     this.scale = scale;
-    this.vcos[0].setFrequency(scale.stepToFrequency(scale.steps[0]));
-    this.vcos[1].setFrequency(scale.stepToFrequency(scale.steps[2]));
+    this.setFrequencies();
     this.envelope.trigger();
+  }
+
+  getChord() {
+    return [
+      this.isMajor
+        ? this.scale.stepToFrequency(0) / 2
+        : this.scale.stepToFrequency(6) / 4,
+      this.isMajor
+        ? this.scale.stepToFrequency(0)
+        : this.scale.stepToFrequency(6) / 2,
+      this.scale.stepToFrequency(this.isMajor ? 2 : 0),
+      this.scale.stepToFrequency(this.isMajor ? 4 : 2),
+      this.scale.stepToFrequency(this.isMajor ? 7 : 5)
+    ];
+  }
+
+  setFrequencies() {
+    const chord = this.getChord();
+    this.vcos.forEach((vco, i) => {
+      vco.setFrequency(chord[i]);
+    });
   }
 
   connect(node) {
@@ -41,21 +67,9 @@ export default class Pad {
   }
 
   setAlternate(alt) {
-    const freq0 = this.scale.stepToFrequency(this.scale.steps[alt ? 0 : 2]) / 2;
-    if (this.vcos[0].osc.frequency.value !== freq0)
-      this.vcos[0].setFrequency(freq0);
-
-    const freq1 = this.scale.stepToFrequency(this.scale.steps[alt ? 4 : 5]) / 2;
-    if (this.vcos[1].osc.frequency.value !== freq1)
-      this.vcos[1].setFrequency(freq1);
-
-    const freq2 = this.scale.stepToFrequency(this.scale.steps[alt ? 0 : 2]);
-    if (this.vcos[2].osc.frequency.value !== freq2)
-      this.vcos[2].setFrequency(freq2);
-  }
-
-  setFrequencies() {
-    this.vcos[0].setFrequency(this.scale.stepToFrequency(this.scale.steps[0]));
-    this.vcos[1].setFrequency(this.scale.stepToFrequency(this.scale.steps[2]));
+    if (this.isMajor !== alt) {
+      this.isMajor = !this.isMajor;
+      this.setFrequencies();
+    }
   }
 }

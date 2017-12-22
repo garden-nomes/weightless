@@ -5,16 +5,23 @@ export default class Scale {
   }
 
   getStep(step) {
-    return this.stepToFrequency(this.steps[step]);
+    return this.intervalToFrequency(this.steps[step]);
+  }
+
+  intervalToFrequency(interval) {
+    return this.base * Math.pow(Math.pow(2, 1 / 12), interval);
   }
 
   stepToFrequency(step) {
-    return this.base * Math.pow(Math.pow(2, 1 / 12), step);
+    while (step < 0) step += this.steps.length;
+    step %= this.steps.length;
+
+    return this.intervalToFrequency(this.steps[step]);
   }
 
   getRandomFrequency() {
     const step = this.steps[~~(Math.random() * this.steps.length)];
-    return this.stepToFrequency(step);
+    return this.intervalToFrequency(step);
   }
 
   getChord() {
@@ -23,11 +30,11 @@ export default class Scale {
       this.steps[2],
       this.steps[4],
       this.steps[6]
-    ].map(step => this.stepToFrequency(step));
+    ].map(step => this.intervalToFrequency(step));
   }
 
   shift() {
-    this.base = this.stepToFrequency(5);
+    this.base = this.intervalToFrequency(5);
     if (this.base > 440) this.base /= 2;
   }
 

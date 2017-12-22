@@ -6,7 +6,7 @@ export default class Melody {
   }
 
   getNote() {
-    const note = this.scale.stepToFrequency(this.scale.steps[this.scaleIndex]);
+    const note = this.scale.stepToFrequency(this.scaleIndex);
     this.scaleIndex += ~~(Math.random() * 7 - 3);
 
     if (this.scaleIndex < 0) this.scaleIndex += this.scale.steps.length;
