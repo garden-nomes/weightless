@@ -40,7 +40,6 @@ export default class GameScene extends PhysicsScene {
       this.player.pos
     );
 
-    this.renderLevel();
     this.moveCamera();
   }
 
@@ -131,10 +130,6 @@ export default class GameScene extends PhysicsScene {
     });
 
     this.removeChild(farthestThing);
-  }
-
-  renderLevel() {
-    document.title = `lvl ${this.player.target - 2}`;
   }
 
   moveCamera() {
