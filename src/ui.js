@@ -14,6 +14,8 @@ export default class UI {
 
     this.toggleHelpNode = document.getElementById('toggle-help');
     this.toggleHelpNode.onclick = this.toggleHelp.bind(this);
+
+    this.levelNumberNode = document.getElementById('level-number');
   }
 
   toggleSound() {
@@ -44,5 +46,9 @@ export default class UI {
     this.helpNode.style.transition = '2s opacity ease-in-out';
     this.helpNode.style.opacity = 0;
     this.helpTimer = null;
+  }
+
+  setLevel(number) {
+    this.levelNumberNode.innerHTML = number;
   }
 }

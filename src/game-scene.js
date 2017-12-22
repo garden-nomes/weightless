@@ -11,10 +11,10 @@ const MIN_PARTICLES_ON_SCREEN = 10;
 const MAX_PARTICLES = 15;
 
 export default class GameScene extends PhysicsScene {
-  constructor(camera, composer) {
+  constructor(camera, composer, levelUp) {
     super(camera, composer);
 
-    this.player = new Player(0, 0, composer);
+    this.player = new Player(0, 0, composer, levelUp);
     this.addChild(this.player);
 
     this.thingController = new SpawnController({

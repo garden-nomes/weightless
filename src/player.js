@@ -6,7 +6,7 @@ const FORCE = 0.15;
 const INITIAL_COLOR = '#fff';
 
 export default class Player extends Thing {
-  constructor(x, y, composer) {
+  constructor(x, y, composer, levelUp) {
     super(x, y, 0.5);
     this.color = INITIAL_COLOR;
 
@@ -16,6 +16,7 @@ export default class Player extends Thing {
     this.scoreAngle = 0;
 
     this.composer = composer;
+    this.onLevelUp = levelUp;
   }
 
   update(step) {
@@ -36,6 +37,7 @@ export default class Player extends Thing {
       this.reset();
       this.composer.dingMe();
       this.composer.shift();
+      this.onLevelUp();
     } else {
       this.composer.boopMe();
     }
