@@ -2,12 +2,17 @@ import GameScene from './game-scene';
 import Renderer from './renderer';
 import Camera from './camera';
 import Composer from './composer';
+import UI from './ui';
 
 export default class Game {
   constructor(canvas) {
     this.canvas = canvas;
 
+    // set up audio
     this.composer = new Composer();
+
+    // set up UI
+    this.ui = new UI(this.composer);
 
     // set up camera
     this.camera = new Camera(canvas.width, canvas.height);
@@ -43,7 +48,7 @@ export default class Game {
     window.requestAnimationFrame(this.update);
   }
 
-  resize(event) {
+  resize() {
     this.canvas.setAttribute('width', window.innerWidth);
     this.canvas.setAttribute('height', window.innerHeight);
     this.camera.width = this.canvas.width;

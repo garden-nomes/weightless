@@ -2,20 +2,56 @@
 <html lang="en">
 <head>
   <title>grav</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      background: #333;
-    }
-
-    html, body, canvas {
-      height: 100%;
-      overflow: hidden;
-    }
-  </style>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
 <body>
+  <div id="help" class="help">
+    <div>
+      <h1>weightless</h1>
+    </div>
+
+    <div></div>
+
+    <div class="help-inner">
+      <ul>
+        <li>
+          <span class="kbd"><i class="fa fa-arrow-up"></i></span><span class="kbd"><i class="fa fa-arrow-down"></i></span><span class="kbd"><i class="fa fa-arrow-left"></i></span><span class="kbd"><i class="fa fa-arrow-right"></i></span>
+          to move around
+        </li>
+        <li>
+          <span class="kbd">space</span>
+          inverts gravity
+        </li>
+      </ul>
+
+      <p>
+        Absorb identical colors in sequence.
+      </p>
+    </div>
+  </div>
+
+  <div class="menu">
+    <ul>
+      <li>
+        <a href="#" id="toggle-sound">
+          <i class="fa fa-fw fa-volume-up"></i> mute
+        </a>
+      </li>
+
+      <li>
+        <a href="#" id="toggle-help">
+          <i class="fa fa-fw fa-question-circle"></i> help
+        </a>
+      </li>
+
+      <li>
+        <a href="https://github.com/noaner/ggg" target="_blank">
+          <i class="fa fa-fw fa-github"></i> source
+        </a>
+      </li>
+    </ul>
+  </div>
+
   <canvas id="canvas" moz-opaque></canvas>
 </body>
 </html>
