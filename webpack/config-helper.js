@@ -38,7 +38,8 @@ module.exports = options => {
           use: {
             loader: 'babel-loader',
             options: {
-              presets: ['es2017']
+              presets: ['es2017'],
+              plugins: ['transform-object-rest-spread']
             }
           }
         },
